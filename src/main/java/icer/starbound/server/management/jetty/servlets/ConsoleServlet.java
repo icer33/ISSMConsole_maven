@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package icer.starbound.server.management.jetty;
+package icer.starbound.server.management.jetty.servlets;
 
 import icer.starbound.server.management.StarboundServer;
 import icer.starbound.server.management.pojos.ServerState;
@@ -31,11 +31,9 @@ public class ConsoleServlet extends HttpServlet {
 
         StringBuilder sb = new StringBuilder();
         ServerState si = server.getStartingInformation();
-//        sb.append("<p>");
         for (String string : si.getConsoleMessages()) {
             sb.append(string+"\n");
         }
-//        sb.append("</p>");
         response.getWriter().println(sb.toString());
     }
 

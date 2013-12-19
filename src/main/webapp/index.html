@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function getServerState()
+{
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+	var response = xmlhttp.responseText;
+	var objJSON = eval("(function(){return " + response + ";})()");
+    document.getElementById("consoleDiv").innerHTML="<p>"+objJSON.consoleMessages.join("<br>")+"<p>";
+    document.getElementById("playerDiv").innerHTML="<p>"+objJSON.activePlayers.join("<br>")+"<p>";
+    document.getElementById("location").innerHTML="location = " +objJSON.location;
+    document.getElementById("state").innerHTML="state = " +objJSON.status;
+    document.getElementById("ip").innerHTML="ip = " +objJSON.ip;
+	var objDiv = document.getElementById("consoleDiv"); 
+	objDiv.scrollTop = objDiv.scrollHeight;
+    }
+  }
+xmlhttp.open("GET","./state/",true);
+xmlhttp.send();
+}
+setInterval(function(){getServerState();},500);
+</script>
+</head>
+<body>
+<div id="menu" style="height:200px;width:400px;float:left;">
+<div id="location"></div>
+<div id="state"></div>
+<div id="ip"></div>
+</div>
+
+<!--<textarea id="consoleDiv" style="width:700px;height:400px;line-height:3em;overflow:scroll;padding:5px;"></textarea>-->
+<div id="consoleDiv" style="width:700px;height:400px;line-height:3em;overflow:scroll;padding:5px;float:left"></div>
+<div id="playerDiv" style="width:300px;height:400px;line-height:3em;overflow:scroll;padding:5px;float:left"></div>
+ 
+</body>
+</html>

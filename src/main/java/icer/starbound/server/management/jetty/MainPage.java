@@ -37,6 +37,7 @@ public class MainPage extends HttpServlet {
         sb.append(createH3("Status", si.getStatus().toString()));
         sb.append(createH3("location", si.getLocation()));
         sb.append(createH3("version", si.getVersion()));
+        
         String ajax = "<script>\n" +
 "function loadXMLDoc()\n" +
 "{\n" +

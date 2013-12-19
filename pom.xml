@@ -29,6 +29,12 @@
             <version>${jetty.version}</version>
         </dependency>
 
+	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-mapper-asl</artifactId>
+		<version>1.8.5</version>
+	</dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -36,6 +42,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
   
     <!-- TODO 2 Configure repo2.maven.org as a repository. -->
     <repositories>
@@ -43,6 +50,10 @@
             <id>repo2_maven_org</id>
             <url>http://repo2.maven.org/maven2</url>
         </repository>
+	<repository>
+		<id>codehaus</id>
+		<url>http://repository.codehaus.org/org/codehaus</url>
+	</repository>
     </repositories>
     
     <build>
