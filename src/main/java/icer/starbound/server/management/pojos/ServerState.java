@@ -4,7 +4,7 @@
  */
 package icer.starbound.server.management.pojos;
 
-import icer.starbound.server.management.ServerStatus;
+import icer.starbound.server.management.enums.ServerStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

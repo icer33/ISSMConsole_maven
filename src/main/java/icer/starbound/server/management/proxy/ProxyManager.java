@@ -4,8 +4,8 @@
  */
 package icer.starbound.server.management.proxy;
 
-import icer.starbound.server.management.JoinFailed;
-import icer.starbound.server.management.ServerListener;
+import icer.starbound.server.management.enums.JoinFailed;
+import icer.starbound.server.management.listeners.ServerListener;
 import icer.starbound.server.management.pojos.PlayerPOJO;
 import java.io.File;
 import java.io.FileOutputStream;

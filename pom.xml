@@ -12,16 +12,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jetty.version>7.1.6.v20100715</jetty.version>
+        <jetty.version>9.1.0.v20131115</jetty.version>
     </properties>
 
-    <!-- TODO 2 Configure repo2.maven.org as a repository. -->
-    <repositories>
-        <repository>
-            <id>repo2_maven_org</id>
-            <url>http://repo2.maven.org/maven2</url>
-        </repository>
-    </repositories>
     
     <!-- TODO 3 Set up dependency to get the jetty-server artifact. -->
     <dependencies>
@@ -31,6 +24,12 @@
             <version>${jetty.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
@@ -38,6 +37,14 @@
         </dependency>
     </dependencies>
   
+    <!-- TODO 2 Configure repo2.maven.org as a repository. -->
+    <repositories>
+        <repository>
+            <id>repo2_maven_org</id>
+            <url>http://repo2.maven.org/maven2</url>
+        </repository>
+    </repositories>
+    
     <build>
         <plugins>
             <plugin>

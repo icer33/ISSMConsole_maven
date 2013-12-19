@@ -4,10 +4,11 @@
  */
 package icer.starbound.server.management;
 
-import icer.starbound.server.management.client.StarboundServerGUI;
-import icer.starbound.server.management.comms.RemoteAccess;
-import icer.starbound.server.management.comms.RemoteDummy;
-import icer.starbound.server.management.comms.RemoteManagement;
+import icer.starbound.server.management.enums.ServerStatus;
+import icer.starbound.server.management.enums.JoinFailed;
+import icer.starbound.server.management.listeners.ServerCommandListener;
+import icer.starbound.server.management.listeners.ServerListener;
+import icer.starbound.server.management.listeners.ConsoleMessageListener;
 import icer.starbound.server.management.util.IPUtil;
 import icer.starbound.server.management.pojos.PlayerPOJO;
 import icer.starbound.server.management.pojos.ChatPOJO;
@@ -46,19 +47,11 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
             Pattern.compile("\\b(?:\\d{1,3}\\.){3}\\d{1,3}:\\d{1,5}\\b");
     List<PlayerPOJO> currentPlayers = new ArrayList<>();
     public static final double MANAGEMENT_VERSION_NUMBER = 0.33;
-    RemoteManagement remoteManagement;
     boolean headless = true;
     private TCPForwardServer tcpForwardServer;
     private ServerState currentState = new ServerState();
 
     public StarboundServer() {
-        try {
-            remoteManagement = new RemoteDummy(true);
-            remoteManagement.setServer(this);
-        } catch (IOException ex) {
-            Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         addServerListener(this);
         addCommandListener(this);
     }
@@ -68,24 +61,20 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
         String str = PropertiesUtil.getProperty(PropertiesUtil.TCP_REDIRECT_KEY);
         if (str == null || str.equals("1")) {
             PropertiesUtil.setProperty(PropertiesUtil.TCP_REDIRECT_KEY, "1");
-//            chkTCPRedirect.setSelected(true);
-            remoteManagement.sendRequest("tcpRedirectActive", true);
             ProxyManager.addListener(this);
             new Thread() {
                 @Override
                 public void run() {
-//                    starboundServer.sendConsoleMessageToListeners("TCP Redirect starting");
+                    sendConsoleMessageToListeners("TCP Redirect starting");
                     try {
                         tcpForwardServer = new TCPForwardServer();
                     } catch (IOException ex) {
-                        Logger.getLogger(StarboundServerGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                        starboundServer.sendConsoleMessageToListeners("Error starting TCP Redirect, is there another copy of ISSMConsole running?");
+                        ex.printStackTrace();
+                        sendConsoleMessageToListeners("Error starting TCP Redirect, is there another copy of ISSMConsole running?");
                     }
                 }
             }.start();
         } else {
-//            chkTCPRedirect.setSelected(false);
-            remoteManagement.sendRequest("tcpRedirectActive", true);
             PropertiesUtil.setProperty(PropertiesUtil.TCP_REDIRECT_KEY, "1");
         }
         PropertiesUtil.save();
@@ -121,12 +110,10 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
                 }
             }
         }.start();
-        remoteManagement.start("localhost");
 
         List<ConsoleMessageListener> cmls = new ArrayList<>();
         cmls.add(this);
         StartupUtil.startServer(headless, null, serverListeners, cmls, currentState);
-        currentState.setLocation("asdasdasd");
 
         killRunningServers();
 
@@ -355,11 +342,13 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
     }
 
     public void sendConsoleMessageToListeners(String str) {
+        String msg = "<ISSMConsole> " + str;
+        currentState.getConsoleMessages().add(msg);
         for (ServerListener serverListener : serverListeners) {
-            serverListener.newLine("<ISSMConsole> " + str);
+            serverListener.newLine(msg);
         }
         if (headless) {
-            System.out.println(str);
+            System.out.println(msg);
         }
     }
 
@@ -428,52 +417,52 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 
     @Override
     public void newLine(String line) {
-        remoteManagement.sendRequest("newLine", line);
+//        remoteManagement.sendRequest("newLine", line);
     }
 
     @Override
     public void playerJoined(PlayerPOJO player) {
-        remoteManagement.sendRequest("playerJoined", player);
+//        remoteManagement.sendRequest("playerJoined", player);
     }
 
     @Override
     public void playerJoinFailed(PlayerPOJO player, JoinFailed failed) {
-        remoteManagement.sendRequest("playerJoinFailed", player, failed);
+//        remoteManagement.sendRequest("playerJoinFailed", player, failed);
     }
 
     @Override
     public void playerLeft(PlayerPOJO player) {
-        remoteManagement.sendRequest("playerLeft", player);
+//        remoteManagement.sendRequest("playerLeft", player);
     }
 
     @Override
     public void serverVersion(String version) {
-        remoteManagement.sendRequest("serverVersion", version);
+//        remoteManagement.sendRequest("serverVersion", version);
     }
 
     @Override
     public void serverStatus(ServerStatus status) {
-        remoteManagement.sendRequest("serverStatus", status);
+//        remoteManagement.sendRequest("serverStatus", status);
     }
 
     @Override
     public void serverIP(String ip) {
-        remoteManagement.sendRequest("serverIP", ip);
+//        remoteManagement.sendRequest("serverIP", ip);
     }
 
     @Override
     public void chatMessage(ChatPOJO chat) {
-        remoteManagement.sendRequest("chatMessage", chat);
+//        remoteManagement.sendRequest("chatMessage", chat);
     }
 
     @Override
     public void worldLoaded(String sector, String coordinates) {
-        remoteManagement.sendRequest("worldLoaded", sector, coordinates);
+//        remoteManagement.sendRequest("worldLoaded", sector, coordinates);
     }
 
     @Override
     public void worldUnloaded(String sector, String coordinates) {
-        remoteManagement.sendRequest("worldUnloaded", sector, coordinates);
+//        remoteManagement.sendRequest("worldUnloaded", sector, coordinates);
     }
 
     @Override
@@ -489,22 +478,22 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 
     @Override
     public void playerAddedtoWhitelist(String ip) {
-        remoteManagement.sendRequest("playerAddedtoWhitelist", ip);
+//        remoteManagement.sendRequest("playerAddedtoWhitelist", ip);
     }
 
     @Override
     public void playerAddedToAdmins(String ip) {
-        remoteManagement.sendRequest("playerAddedToAdmins", ip);
+//        remoteManagement.sendRequest("playerAddedToAdmins", ip);
     }
 
     @Override
     public void banPlayer(String ip, ProxyActions action) {
-        remoteManagement.sendRequest("banPlayer", ip, action);
+//        remoteManagement.sendRequest("banPlayer", ip, action);
     }
 
     @Override
     public void serverLocation(String location) {
-        remoteManagement.sendRequest("serverLocation", location);
+//        remoteManagement.sendRequest("serverLocation", location);
     }
 
     @Override

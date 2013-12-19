@@ -4,7 +4,7 @@
  */
 package icer.starbound.server.management.pojos;
 
-import icer.starbound.server.management.JoinFailed;
+import icer.starbound.server.management.enums.JoinFailed;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

@@ -4,10 +4,9 @@
  */
 package icer.starbound.server.management.util;
 
-import icer.starbound.server.management.ConsoleMessageListener;
-import icer.starbound.server.management.ServerListener;
-import icer.starbound.server.management.ServerStatus;
-import icer.starbound.server.management.client.StarboundServerGUI;
+import icer.starbound.server.management.listeners.ConsoleMessageListener;
+import icer.starbound.server.management.listeners.ServerListener;
+import icer.starbound.server.management.enums.ServerStatus;
 import icer.starbound.server.management.pojos.ServerState;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,8 +15,6 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
@@ -172,8 +169,7 @@ public class StartupUtil {
 
 
         } catch (Exception ex) {
-            Logger.getLogger(StarboundServerGUI.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
 //            }
 //        }.start();
