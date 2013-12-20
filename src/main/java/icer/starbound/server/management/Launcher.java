@@ -30,8 +30,7 @@ public class Launcher {
         new Thread() {
             public void run() {
                 try {
-                    
-                    starboundServer.startServer(PropertiesUtil.getProperty(PropertiesUtil.SERVER_LOCATION_KEY));
+                    starboundServer.startServer();
                 } catch (Exception ex) {
                     Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
                 }

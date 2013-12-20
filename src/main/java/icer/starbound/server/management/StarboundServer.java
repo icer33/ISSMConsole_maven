@@ -122,7 +122,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
         return commandListeners.remove(o);
     }
 
-    public void startServer(String serverLocation) throws Exception {
+    public void startServer() throws Exception {
         startProxy();
 
         new Thread() {
@@ -143,6 +143,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 
         killRunningServers();
 
+        String serverLocation= PropertiesUtil.getProperty(PropertiesUtil.SERVER_LOCATION_KEY);
         ProcessBuilder builder = new ProcessBuilder(serverLocation);
         builder.redirectErrorStream(true);
         serverProcess = builder.start();
