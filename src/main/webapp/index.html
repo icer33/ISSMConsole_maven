@@ -1,6 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style type="text/css">
+  body {
+    color: #ecf1ea;
+    background-color: #101616 }
+div.block{
+  overflow:hidden;
+}
+div.block label{
+  width:160px;
+  display:block;
+  float:left;
+  text-align:left;
+}
+div.block .input{
+  margin-left:4px;
+  float:left;
+}
+div.tablediv {
+width:350px;
+height:200px;
+overflow:auto;
+padding:5px;
+float:left;
+border:2px solid red;
+}
+table {
+}
+
+  </style>
+  <script>
+  Date.prototype.customFormat = function(formatString){
+    var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
+    var dateObject = this;
+    YY = ((YYYY=dateObject.getFullYear())+"").slice(-2);
+    MM = (M=dateObject.getMonth()+1)<10?('0'+M):M;
+    MMM = (MMMM=["January","February","March","April","May","June","July","August","September","October","November","December"][M-1]).substring(0,3);
+    DD = (D=dateObject.getDate())<10?('0'+D):D;
+    DDD = (DDDD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][dateObject.getDay()]).substring(0,3);
+    th=(D>=10&&D<=20)?'th':((dMod=D%10)==1)?'st':(dMod==2)?'nd':(dMod==3)?'rd':'th';
+    formatString = formatString.replace("#YYYY#",YYYY).replace("#YY#",YY).replace("#MMMM#",MMMM).replace("#MMM#",MMM).replace("#MM#",MM).replace("#M#",M).replace("#DDDD#",DDDD).replace("#DDD#",DDD).replace("#DD#",DD).replace("#D#",D).replace("#th#",th);
+
+    h=(hhh=dateObject.getHours());
+    if (h==0) h=24;
+    if (h>12) h-=12;
+    hh = h<10?('0'+h):h;
+    AMPM=(ampm=hhh<12?'am':'pm').toUpperCase();
+    mm=(m=dateObject.getMinutes())<10?('0'+m):m;
+    ss=(s=dateObject.getSeconds())<10?('0'+s):s;
+    return formatString.replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
+}  
+
+function msToTime(s) {
+
+  function addZ(n) {
+    return (n<10? '0':'') + n;
+  }
+
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
+
+  return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs) + '.' + ms;
+}
+  </script>
+  
 <script>
 function getServerState()
 {
@@ -19,8 +87,31 @@ xmlhttp.onreadystatechange=function()
     {
 	var response = xmlhttp.responseText;
 	var objJSON = eval("(function(){return " + response + ";})()");
-    document.getElementById("consoleDiv").innerHTML="<p>"+objJSON.consoleMessages.join("<br>")+"<p>";
-    document.getElementById("playerDiv").innerHTML="<p>"+objJSON.activePlayers.join("<br>")+"<p>";
+	
+	var playerStr="<table border='1'><caption>Current Players</caption>";	
+	for (var i = 0; i < objJSON.activePlayers.length; i++) {
+    var player = objJSON.activePlayers[i];
+		playerStr = playerStr+"<tr><td>"+player.name+"</td><td>"+player.ip+"</td>";
+		playerStr = playerStr+"<td><select>"+
+		"<option value='' style='display:none'>Option</option>"+
+		"<option value='kick'>Kick</option>"+
+		"<option value='ban1hour'>Ban 1 hour</option>"+
+		"<option value='ban1day'>Ban 1 day</option>"+
+		"<option value='ban'>Ban permanently</option></select>";
+		playerStr= playerStr+"</td></tr>";
+	}
+	playerStr=playerStr+"</table>";
+	
+		var bannedStr="<table border='1'><caption>Current Players</caption>";	
+	for (var i = 0; i < objJSON.activePlayers.length; i++) {
+    var player = objJSON.activePlayers[i];
+		bannedStr = bannedStr+"<tr><td>"+player.name+"</td><td>"+player.ip+"</td>";
+		bannedStr= bannedStr+"</td></tr>";
+	}
+	bannedStr=bannedStr+"</table>";
+		
+    document.getElementById("consoleDiv").innerHTML="<pre>"+objJSON.consoleMessages.join("\n")+"</pre>";
+    document.getElementById("playerDiv").innerHTML=playerStr;
     document.getElementById("location").innerHTML="location = " +objJSON.location;
     document.getElementById("state").innerHTML="state = " +objJSON.status;
     document.getElementById("ip").innerHTML="ip = " +objJSON.ip;
@@ -41,9 +132,17 @@ setInterval(function(){getServerState();},500);
 <div id="ip"></div>
 </div>
 
-<!--<textarea id="consoleDiv" style="width:700px;height:400px;line-height:3em;overflow:scroll;padding:5px;"></textarea>-->
-<div id="consoleDiv" style="width:700px;height:400px;line-height:3em;overflow:scroll;padding:5px;float:left"></div>
-<div id="playerDiv" style="width:300px;height:400px;line-height:3em;overflow:scroll;padding:5px;float:left"></div>
- 
+<!--line-height:3em;-->
+
+<div style='float:left'>
+<div id="playerDiv" class='tablediv'></div>
+<div style='float:clear'>
+<div id="bannedDiv" class='tablediv'></div>
+<div style='float:clear'>
+<div id="div2" class='tablediv'></div>
+</div>
+<!--<div style='float:clear'>-->
+<div id="consoleDiv" style="width:700px;height:400px;overflow:scroll;padding:5px;float:left"></div>
+</div>
 </body>
 </html>
