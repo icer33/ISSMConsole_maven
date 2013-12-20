@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Icer's Starbound Server Panel | SSE Test</title>
+	<script>
+		if(typeof(EventSource)!=="undefined")
+		{
+			var source = new EventSource("sse");
+			source.onmessage=function(event)
+			{
+				document.getElementById("result").innerHTML = event.data + "<br />";
+			};
+		}
+		else
+		{
+			document.getElementById("result").innerHTML = "SSE not supported<br />";
+		}
+		
+	</script>
+</head>
+
+<body>
+	<div id="result">This should display the time, being updated every 5 seconds</div>
+</body>
+</html>

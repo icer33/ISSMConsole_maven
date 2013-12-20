@@ -65,6 +65,7 @@ public class Launcher {
 //        context.addServlet(new ServletHolder(new MainPage(starboundServer)), "/*");
         context.addServlet(new ServletHolder(new ConsoleServlet(starboundServer)), "/console/*");
         context.addServlet(new ServletHolder(new CurrentStateServlet(starboundServer)), "/state/*");
+		context.addServlet(new ServletHolder(new SSEServlet(starboundServer)), "/sse/");
         context.addServlet(new ServletHolder(new HelloServlet("Buongiorno Mondo")), "/it/*");
         context.addServlet(new ServletHolder(new HelloServlet("Bonjour le Monde")), "/fr/*");
 
