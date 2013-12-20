@@ -27,7 +27,8 @@ public class SSEServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/event-stream");
         response.setStatus(HttpServletResponse.SC_OK);
+        
 
-        response.getWriter().println(System.currentTimeMillis() + <br />);
+        response.getWriter().println(System.currentTimeMillis() + "<br />");
     }
 }

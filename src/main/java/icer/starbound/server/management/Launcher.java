@@ -7,6 +7,7 @@ package icer.starbound.server.management;
 import icer.starbound.server.management.jetty.servlets.ConsoleServlet;
 import icer.starbound.server.management.jetty.servlets.CurrentStateServlet;
 import icer.starbound.server.management.jetty.servlets.HelloServlet;
+import icer.starbound.server.management.jetty.servlets.SSEServlet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.server.Server;
@@ -61,12 +62,12 @@ public class Launcher {
         handlerList.addHandler(context);
         server.setHandler(handlerList);
 //        server.setHandler(context);
-        
+
 
 //        context.addServlet(new ServletHolder(new MainPage(starboundServer)), "/*");
         context.addServlet(new ServletHolder(new ConsoleServlet(starboundServer)), "/console/*");
         context.addServlet(new ServletHolder(new CurrentStateServlet(starboundServer)), "/state/*");
-		context.addServlet(new ServletHolder(new SSEServlet(starboundServer)), "/sse/");
+        context.addServlet(new ServletHolder(new SSEServlet(starboundServer)), "/sse/*");
         context.addServlet(new ServletHolder(new HelloServlet("Buongiorno Mondo")), "/it/*");
         context.addServlet(new ServletHolder(new HelloServlet("Bonjour le Monde")), "/fr/*");
 

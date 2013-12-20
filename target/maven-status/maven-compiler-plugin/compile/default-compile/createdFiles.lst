@@ -1,10 +1,11 @@
 icer\starbound\server\management\StarboundServer$3.class
 icer\starbound\server\management\StarboundServer$2.class
-icer\starbound\server\management\jetty\ServerStateHandler.class
 icer\starbound\server\management\proxy\BannedPlayer.class
+icer\starbound\server\management\jetty\ServerStateHandler.class
 icer\starbound\server\management\jetty\HellowHandler.class
 icer\starbound\server\management\proxy\ProxyManager.class
 icer\starbound\server\management\Launcher.class
+icer\starbound\server\management\jetty\servlets\SSEServlet.class
 icer\starbound\server\management\pojos\ChatPOJO.class
 icer\starbound\server\management\StarboundServer.class
 icer\starbound\server\management\StarboundServer$4.class
@@ -12,8 +13,8 @@ icer\starbound\server\management\jetty\servlets\CurrentStateServlet.class
 icer\starbound\server\management\proxy\ClientThread.class
 icer\starbound\server\management\pojos\PlayerPOJO.class
 icer\starbound\server\management\util\IPUtil.class
-icer\starbound\server\management\jetty\MainPage.class
 icer\starbound\server\management\pojos\ServerState.class
+icer\starbound\server\management\jetty\MainPage.class
 icer\starbound\server\management\util\StartupUtil.class
 icer\starbound\server\management\enums\JoinFailed.class
 icer\starbound\server\management\Launcher$1.class
