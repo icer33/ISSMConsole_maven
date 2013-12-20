@@ -61,6 +61,7 @@ public class Launcher {
         handlerList.addHandler(context);
         server.setHandler(handlerList);
 //        server.setHandler(context);
+        
 
 //        context.addServlet(new ServletHolder(new MainPage(starboundServer)), "/*");
         context.addServlet(new ServletHolder(new ConsoleServlet(starboundServer)), "/console/*");
@@ -69,6 +70,7 @@ public class Launcher {
         context.addServlet(new ServletHolder(new HelloServlet("Buongiorno Mondo")), "/it/*");
         context.addServlet(new ServletHolder(new HelloServlet("Bonjour le Monde")), "/fr/*");
 
+        System.out.println(System.currentTimeMillis());
 
         try {
             server.start();

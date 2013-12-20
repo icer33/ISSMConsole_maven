@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+<Whitelist>
+<!--To activate the white list, add any IP to an AllowedPlayer field, ie <AllowedPlayer>1.2.3.4</AllowedPlayer>-->
+</Whitelist>
+<Adminlist>
+<!--To set the admin password add a AdminPassword field, ie <AdminPassword>abc</AdminPassword>-->
+<AdminPassword/>
+<!--To make a player an Administrator simply add their IP to a ServerAdmin field, ie <ServerAdmin>1.2.3.4</ServerAdmin>-->
+</Adminlist>
+<Banned>
+<!--To ban a player, create a <BannedPlayer><IPAddress>1.2.3.4</IPAddress><BannedUntil>date-in-milliseconds</BannedUntil></BannedPlayer>-->
+</Banned>
+</root>

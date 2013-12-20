@@ -54,6 +54,32 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
     public StarboundServer() {
         addServerListener(this);
         addCommandListener(this);
+        
+        loadBanList();
+    }
+
+    private void loadBanList() {
+        ProxyManager.loadBanList();
+
+//        lblBannedPlayers.setText("Banned Players (0)");
+//        lblWhitelistPlayers.setText("Whitelist Players (0)  -  INACTIVE");
+//        lblServerAdmins.setText("Server Admins (0)");
+//        lblAdminPP.setText("No password set - Admin disabled");
+
+        for (String ip : ProxyManager.getBannedIpAddresses()) {
+            PlayerPOJO player = new PlayerPOJO("", ip);
+            player.setBannedUntil(ProxyManager.getBannedPlayer(ip).getBannedUntil());
+            currentState.getBannedPlayers().add(player);
+        }
+        for (String string : ProxyManager.getWhiteList()) {
+            currentState.getWhiteList().add(string);
+        }
+        for (String string : ProxyManager.getServerAdmins()) {
+            currentState.getAdmins().add(string);
+        }
+        if (ProxyManager.getAdminPassword() != null) {
+            currentState.setServerPassword(ProxyManager.getAdminPassword());
+        }
     }
 
     private void startProxy() {

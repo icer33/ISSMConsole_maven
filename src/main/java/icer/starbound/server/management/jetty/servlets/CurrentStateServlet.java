@@ -24,6 +24,7 @@ public class CurrentStateServlet extends HttpServlet {
         this.server = server;
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);

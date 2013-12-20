@@ -28,6 +28,7 @@ public class ServerState implements Serializable{
     List<PlayerPOJO> activePlayers;
     List<PlayerPOJO> failedToJoin;
     List<String> consoleMessages;
+    String serverPassword;
 
     public ServerState() {
         worlds = new ArrayList<>();
@@ -69,6 +70,14 @@ public class ServerState implements Serializable{
 
     public List<PlayerPOJO> getFailedToJoin() {
         return failedToJoin;
+    }
+
+    public String getServerPassword() {
+        return serverPassword;
+    }
+
+    public void setServerPassword(String serverPassword) {
+        this.serverPassword = serverPassword;
     }
 
     public String getConfig() {
