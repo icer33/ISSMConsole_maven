@@ -4,7 +4,7 @@
   <style type="text/css">
   body {
     color: #ecf1ea;
-    background-color: #101616 }
+    background-color: #233030 }
 div.block{
   overflow:hidden;
 }
@@ -19,17 +19,32 @@ div.block .input{
   float:left;
 }
 div.tablediv {
-width:350px;
-height:200px;
-overflow:auto;
-padding:5px;
-float:left;
-box-shadow: 5px 5px 2px black;  
--moz-box-shadow: 5px 5px 2px black;  
--webkit-box-shadow: 5px 5px 2px black;  
+	width:350px;
+	height:200px;
+	overflow:auto;
+	padding:5px;
+	float:left;
+	box-shadow: 5px 5px 2px black;  
+	-moz-box-shadow: 5px 5px 2px black;  
+	-webkit-box-shadow: 5px 5px 2px black;  
+	margin:5px;
+	background-color: #4c6969;
+text-shadow: 2px 2px black;
 }
 table {
+width:"100%";
+border:"0";
+cellspacing:"0";
+cellpadding:"5";
 }
+h4
+{
+} 
+td
+{
+text-shadow: 1px 1px black;
+	padding:1px 5px 1px 5px;
+} 
 
   </style>
   <script>
@@ -67,7 +82,7 @@ function msToTime(s) {
   var mins = s % 60;
   var hrs = (s - mins) / 60;
 
-  return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs) + '.' + ms;
+  return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);
 }
   </script>
   
@@ -90,12 +105,13 @@ xmlhttp.onreadystatechange=function()
 	var response = xmlhttp.responseText;
 	var objJSON = eval("(function(){return " + response + ";})()");
 	
-	var playerStr="<table border='1'><caption>Current Players</caption>";	
+	var playerStr="<h4>Current Players</h4><table border='1'>";	
+		playerStr = playerStr+"<tr><td>Player Name</td><td>Player IP</td><td>Action</td>";
 	for (var i = 0; i < objJSON.activePlayers.length; i++) {
     var player = objJSON.activePlayers[i];
 		playerStr = playerStr+"<tr><td>"+player.name+"</td><td>"+player.ip+"</td>";
 		playerStr = playerStr+"<td><select>"+
-		"<option value='' style='display:none'>Option</option>"+
+		"<option value='' style='display:none'>Action</option>"+
 		"<option value='kick'>Kick</option>"+
 		"<option value='ban1hour'>Ban 1 hour</option>"+
 		"<option value='ban1day'>Ban 1 day</option>"+
@@ -104,16 +120,41 @@ xmlhttp.onreadystatechange=function()
 	}
 	playerStr=playerStr+"</table>";
 	
-		var bannedStr="<table border='1'><caption>Current Players</caption>";	
-	for (var i = 0; i < objJSON.activePlayers.length; i++) {
-    var player = objJSON.activePlayers[i];
-		bannedStr = bannedStr+"<tr><td>"+player.name+"</td><td>"+player.ip+"</td>";
+	var bannedStr="<h4>Banned Players</h4><table border='1'>";	
+	bannedStr = bannedStr+"<tr><td>Player IP</td><td>Ban expires</td>";
+	for (var i = 0; i < objJSON.bannedPlayers.length; i++) {
+		var player = objJSON.bannedPlayers[i];
+		var diff = (player.bannedUntil - (new Date().getTime()));
+		bannedStr = bannedStr+"<tr><td>"+player.ip+"</td><td>"+msToTime(diff)+"</td>";
 		bannedStr= bannedStr+"</td></tr>";
 	}
 	bannedStr=bannedStr+"</table>";
+	
+	var adminStr="<h4>Administrators</h4><table border='1'>";	
+	adminStr = adminStr+"<tr><td>Player IP</td>";
+	for (var i = 0; i < objJSON.admins.length; i++) {
+		var player = objJSON.bannedPlayers[i];
+		var diff = (player.bannedUntil - (new Date().getTime()));
+		adminStr = adminStr+"<tr><td>"+player.ip+"</td></tr>";
+	}
+	adminStr=adminStr+"</table>";
+	
+	var failedJoinStr="<h4>Failed logins</h4><table border='1'>";	
+	failedJoinStr = failedJoinStr+"<tr><td>Timestamp</td><td>Player IP</td><td>Reason</td>";
+	for (var i = 0; i < objJSON.admins.length; i++) {
+		var player = objJSON.bannedPlayers[i];
+		var diff = (player.bannedUntil - (new Date().getTime()));
+		failedJoinStr = failedJoinStr+"<tr><td>"+player.ip+"</td></tr>";
+	}
+	failedJoinStr=failedJoinStr+"</table>";
+	
+	"failedToJoin":[{"name":"Unknown","ip":"68.13.211.242","bannedUntil":0,"failedReason":"Bad_Password","timeConnected":1387513552775}]
 		
     document.getElementById("consoleDiv").innerHTML="<pre>"+objJSON.consoleMessages.join("\n")+"</pre>";
     document.getElementById("playerDiv").innerHTML=playerStr;
+    document.getElementById("bannedDiv").innerHTML=bannedStr;
+    document.getElementById("adminDiv").innerHTML=adminStr;
+    document.getElementById("failedJoinDiv").innerHTML=failedJoinStr;
     document.getElementById("location").innerHTML="location = " +objJSON.location;
     document.getElementById("state").innerHTML="state = " +objJSON.status;
     document.getElementById("ip").innerHTML="ip = " +objJSON.ip;
@@ -132,20 +173,22 @@ setInterval(function(){getServerState();},500);
 <div id="location"></div>
 <div id="state"></div>
 <div id="ip"></div>
+<div style='float:left;'>
+<div id="playerDiv" class='tablediv'></div>
+<div style='float:clear'></div>
+<div id="bannedDiv" class='tablediv'></div>
+<div style='float:clear'></div>
+<div id="adminDiv" class='tablediv'></div>
+<div style='float:clear'></div>
+<div id="failedJoinDiv" class='tablediv'></div>
 </div>
-<div style="float:clear;">
+</div>
+<div style="float:clear;"></div>
 
+<div id="consoleDiv" style="width:700px;height:800px;overflow:scroll;padding:5px;float:left"></div>
 <!--line-height:3em;-->
 
-<div style='float:left'>
-<div id="playerDiv" class='tablediv'></div>
-<div style='float:clear'>
-<div id="bannedDiv" class='tablediv'></div>
-<div style='float:clear'>
-<div id="div2" class='tablediv'></div>
-</div>
 <!--<div style='float:clear'>-->
-<div id="consoleDiv" style="width:700px;height:400px;overflow:scroll;padding:5px;float:left"></div>
-</div>
+
 </body>
 </html>

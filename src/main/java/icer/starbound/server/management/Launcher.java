@@ -8,6 +8,7 @@ import icer.starbound.server.management.jetty.servlets.ConsoleServlet;
 import icer.starbound.server.management.jetty.servlets.CurrentStateServlet;
 import icer.starbound.server.management.jetty.servlets.HelloServlet;
 import icer.starbound.server.management.jetty.servlets.SSEServlet;
+import icer.starbound.server.management.util.PropertiesUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jetty.server.Server;
@@ -23,12 +24,14 @@ import org.eclipse.jetty.servlet.ServletHolder;
 public class Launcher {
 
     public static void main(String[] args) {
-
+        PropertiesUtil.load();
+        
         final StarboundServer starboundServer = new StarboundServer();
         new Thread() {
             public void run() {
                 try {
-                    starboundServer.startServer("D:\\SteamLibrary\\SteamApps\\common\\Starbound\\win32\\starbound_server.exe");
+                    
+                    starboundServer.startServer(PropertiesUtil.getProperty(PropertiesUtil.SERVER_LOCATION_KEY));
                 } catch (Exception ex) {
                     Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
                 }

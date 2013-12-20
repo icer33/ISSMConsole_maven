@@ -5,10 +5,15 @@
 </Whitelist>
 <Adminlist>
 <!--To set the admin password add a AdminPassword field, ie <AdminPassword>abc</AdminPassword>-->
-<AdminPassword/>
+<AdminPassword>abc</AdminPassword>
 <!--To make a player an Administrator simply add their IP to a ServerAdmin field, ie <ServerAdmin>1.2.3.4</ServerAdmin>-->
+<ServerAdmin>1.2.3.4</ServerAdmin>
 </Adminlist>
 <Banned>
 <!--To ban a player, create a <BannedPlayer><IPAddress>1.2.3.4</IPAddress><BannedUntil>date-in-milliseconds</BannedUntil></BannedPlayer>-->
+<BannedPlayer>
+<IPAddress>1.2.3.4</IPAddress>
+<BannedUntil>1387590593378</BannedUntil>
+</BannedPlayer>
 </Banned>
 </root>
