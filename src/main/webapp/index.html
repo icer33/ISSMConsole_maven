@@ -133,23 +133,20 @@ xmlhttp.onreadystatechange=function()
 	var adminStr="<h4>Administrators</h4><table border='1'>";	
 	adminStr = adminStr+"<tr><td>Player IP</td>";
 	for (var i = 0; i < objJSON.admins.length; i++) {
-		var player = objJSON.bannedPlayers[i];
-		var diff = (player.bannedUntil - (new Date().getTime()));
-		adminStr = adminStr+"<tr><td>"+player.ip+"</td></tr>";
+		var player = objJSON.admins[i];
+		adminStr = adminStr+"<tr><td>"+player+"</td></tr>";
 	}
 	adminStr=adminStr+"</table>";
 	
 	var failedJoinStr="<h4>Failed logins</h4><table border='1'>";	
 	failedJoinStr = failedJoinStr+"<tr><td>Timestamp</td><td>Player IP</td><td>Reason</td>";
-	for (var i = 0; i < objJSON.admins.length; i++) {
-		var player = objJSON.bannedPlayers[i];
-		var diff = (player.bannedUntil - (new Date().getTime()));
-		failedJoinStr = failedJoinStr+"<tr><td>"+player.ip+"</td></tr>";
+	for (var i = 0; i < objJSON.failedToJoin.length; i++) {
+		var player = objJSON.failedToJoin[i];
+	var timestamp = new Date(player.timeConnected).customFormat("#DD##MMM##YY# #hhh#:#mm#:#ss#");
+		failedJoinStr = failedJoinStr+"<tr><td>"+timestamp+"</td><td>"+player.ip+"</td><td>"+player.failedReason+"</td></tr>";
 	}
 	failedJoinStr=failedJoinStr+"</table>";
-	
-	"failedToJoin":[{"name":"Unknown","ip":"68.13.211.242","bannedUntil":0,"failedReason":"Bad_Password","timeConnected":1387513552775}]
-		
+			
     document.getElementById("consoleDiv").innerHTML="<pre>"+objJSON.consoleMessages.join("\n")+"</pre>";
     document.getElementById("playerDiv").innerHTML=playerStr;
     document.getElementById("bannedDiv").innerHTML=bannedStr;
