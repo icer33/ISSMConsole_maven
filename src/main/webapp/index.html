@@ -162,7 +162,24 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open("GET","./state/",true);
 xmlhttp.send();
 }
-setInterval(function(){getServerState();},500);
+<!--setInterval(function(){getServerState();},2000);-->
+
+var consoleMsgs = "";
+var eventSource = new EventSource("./sse/");
+eventSource.onmessage = function(event)
+{
+	window.console.info("Server-Sent Event: " + event.data);
+	var arr = /^([^:]*):(.*)$/.exec(event.data); 
+	var type = arr[1];
+	var data = arr[2];
+	window.console.info("Server-Sent Event: " + data);
+	if (type == "newLine"){
+		consoleMsgs = consoleMsgs + data+"\n";
+		var console = document.getElementById("consoleDiv");
+		console.innerHTML = "<pre>"+consoleMsgs+"</pre>";
+	}
+};
+
 </script>
 </head>
 <body>

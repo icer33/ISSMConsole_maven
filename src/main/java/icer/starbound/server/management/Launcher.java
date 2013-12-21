@@ -7,7 +7,10 @@ package icer.starbound.server.management;
 import icer.starbound.server.management.jetty.servlets.ConsoleServlet;
 import icer.starbound.server.management.jetty.servlets.CurrentStateServlet;
 import icer.starbound.server.management.jetty.servlets.HelloServlet;
+import icer.starbound.server.management.jetty.servlets.MyEventSourceServlet;
 import icer.starbound.server.management.jetty.servlets.SSEServlet;
+import icer.starbound.server.management.jetty.servlets.ServerListenerServlet;
+import icer.starbound.server.management.jetty.servlets.ServerTimeServlet;
 import icer.starbound.server.management.util.PropertiesUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +19,7 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.EventSourceServlet;
 
 /**
  *
@@ -25,7 +29,7 @@ public class Launcher {
 
     public static void main(String[] args) {
         PropertiesUtil.load();
-        
+
         final StarboundServer starboundServer = new StarboundServer();
         new Thread() {
             public void run() {
@@ -65,11 +69,14 @@ public class Launcher {
         server.setHandler(handlerList);
 //        server.setHandler(context);
 
+        final MyEventSourceServlet ess = new MyEventSourceServlet();
+        final ServerListenerServlet serverListenerServlet = new ServerListenerServlet();
+        starboundServer.addServerListener(serverListenerServlet);
 
 //        context.addServlet(new ServletHolder(new MainPage(starboundServer)), "/*");
         context.addServlet(new ServletHolder(new ConsoleServlet(starboundServer)), "/console/*");
         context.addServlet(new ServletHolder(new CurrentStateServlet(starboundServer)), "/state/*");
-        context.addServlet(new ServletHolder(new SSEServlet(starboundServer)), "/sse/*");
+        context.addServlet(new ServletHolder(serverListenerServlet), "/sse/*");
         context.addServlet(new ServletHolder(new HelloServlet("Buongiorno Mondo")), "/it/*");
         context.addServlet(new ServletHolder(new HelloServlet("Bonjour le Monde")), "/fr/*");
 

@@ -252,9 +252,9 @@ public class ProxyManager {
     public static void banPlayer(String ip, long until) {
         banned.put(ip, new BannedPlayer(ip, until));
         saveBanList();
-        for (ServerListener serverListener : serverListeners) {
-            serverListener.playerBanned(ip, until);
-        }
+//        for (ServerListener serverListener : serverListeners) {
+//            serverListener.playerBanned(ip, until);
+//        }
     }
 
     protected static boolean allowConnection(String ip) {
@@ -281,9 +281,9 @@ public class ProxyManager {
     }
 
     private static void sendFailedLoginEvent(String ip, JoinFailed reason) {
-        for (ServerListener serverListener : serverListeners) {
-            serverListener.playerJoinFailed(new PlayerPOJO("Unknown", ip), reason);
-        }
+//        for (ServerListener serverListener : serverListeners) {
+//            serverListener.playerJoinFailed(new PlayerPOJO("Unknown", ip), reason);
+//        }
     }
 
     public static void addClient(ClientAddress c1, ClientAddress c2) {

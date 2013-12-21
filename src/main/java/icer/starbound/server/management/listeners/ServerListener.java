@@ -9,6 +9,7 @@ import icer.starbound.server.management.enums.ServerStatus;
 import icer.starbound.server.management.pojos.PlayerPOJO;
 import icer.starbound.server.management.pojos.ChatPOJO;
 import icer.starbound.server.management.pojos.ServerState;
+import icer.starbound.server.management.pojos.WorldPOJO;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public interface ServerListener {
 
     public void playerJoined(PlayerPOJO player);
 
-    public void playerJoinFailed(PlayerPOJO player, JoinFailed failed);
+    public void playerJoinFailed(PlayerPOJO player);
 
     public void playerLeft(PlayerPOJO player);
 
@@ -35,11 +36,11 @@ public interface ServerListener {
 
     public void chatMessage(ChatPOJO chat);
 
-    public void worldLoaded(String sector, String coordinates);
+    public void worldLoaded(WorldPOJO world);
 
-    public void worldUnloaded(String sector, String coordinates);
+    public void worldUnloaded(WorldPOJO world);
 
-    public void playerBanned(String ip, long until);
+    public void playerBanned(PlayerPOJO player);
 
     public void playerKicked(String ip);
 

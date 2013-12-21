@@ -54,7 +54,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
     public StarboundServer() {
         addServerListener(this);
         addCommandListener(this);
-        
+
         loadBanList();
     }
 
@@ -143,7 +143,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 
         killRunningServers();
 
-        String serverLocation= PropertiesUtil.getProperty(PropertiesUtil.SERVER_LOCATION_KEY);
+        String serverLocation = PropertiesUtil.getProperty(PropertiesUtil.SERVER_LOCATION_KEY);
         ProcessBuilder builder = new ProcessBuilder(serverLocation);
         builder.redirectErrorStream(true);
         serverProcess = builder.start();
@@ -263,7 +263,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
                 player.setFailedReason(JoinFailed.Bad_Password);
                 currentState.getFailedToJoin().add(player);
                 for (ServerListener serverListener : serverListeners) {
-                    serverListener.playerJoinFailed(player, JoinFailed.Bad_Password);
+                    serverListener.playerJoinFailed(player);
                 }
             }
         } else if (line.startsWith("Info:  <")) {
@@ -284,7 +284,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
             WorldPOJO world = new WorldPOJO(sector, coordinates);
             currentState.getWorlds().add(world);
             for (ServerListener serverListener : serverListeners) {
-                serverListener.worldLoaded(sector, coordinates);
+                serverListener.worldLoaded(world);
             }
         } else if (line.startsWith("Info: Shutting down world ")) {
             String[] worldStr = line.split(" world ")[1].split(":", 2);
@@ -293,7 +293,7 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
             WorldPOJO world = new WorldPOJO(sector, coordinates);
             currentState.getWorlds().remove(world);
             for (ServerListener serverListener : serverListeners) {
-                serverListener.worldUnloaded(sector, coordinates);
+                serverListener.worldUnloaded(world);
             }
         }
     }
@@ -431,8 +431,14 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 
     private String getPlayerNameFromCommand(String txt) {
         String[] splt = txt.split(" ");
-        if (splt.length == 3) {
-            return convertNameToIP(splt[1]);
+        if (splt.length >= 3) {
+            String name = "";
+            for (int i = 1; i < splt.length - 1; i++) {
+                String string = splt[i];
+                name += string;
+            }
+
+            return convertNameToIP(name);
         }
         return null;
     }
@@ -450,11 +456,6 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
     @Override
     public void playerJoined(PlayerPOJO player) {
 //        remoteManagement.sendRequest("playerJoined", player);
-    }
-
-    @Override
-    public void playerJoinFailed(PlayerPOJO player, JoinFailed failed) {
-//        remoteManagement.sendRequest("playerJoinFailed", player, failed);
     }
 
     @Override
@@ -482,27 +483,16 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
 //        remoteManagement.sendRequest("chatMessage", chat);
     }
 
-    @Override
-    public void worldLoaded(String sector, String coordinates) {
-//        remoteManagement.sendRequest("worldLoaded", sector, coordinates);
-    }
-
-    @Override
-    public void worldUnloaded(String sector, String coordinates) {
-//        remoteManagement.sendRequest("worldUnloaded", sector, coordinates);
-    }
-
-    @Override
-    public void playerBanned(String ip, long until) {
-//        remoteManagement.sendRequest("playerBanned", ip, until);
-        ProxyManager.banPlayer(ip, System.currentTimeMillis() + 60 * 60 * 1000);
-        try {
-            ProxyManager.closeSocket(ip);
-        } catch (IOException ex) {
-            Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+//    @Override
+//    public void playerBanned(String ip, long until) {
+////        remoteManagement.sendRequest("playerBanned", ip, until);
+//        ProxyManager.banPlayer(ip, System.currentTimeMillis() + 60 * 60 * 1000);
+//        try {
+//            ProxyManager.closeSocket(ip);
+//        } catch (IOException ex) {
+//            Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     @Override
     public void playerAddedtoWhitelist(String ip) {
 //        remoteManagement.sendRequest("playerAddedtoWhitelist", ip);
@@ -548,5 +538,21 @@ public class StarboundServer implements ServerListener, ServerCommandListener, C
         } catch (IOException ex) {
             Logger.getLogger(StarboundServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void worldLoaded(WorldPOJO world) {
+    }
+
+    @Override
+    public void worldUnloaded(WorldPOJO world) {
+    }
+
+    @Override
+    public void playerJoinFailed(PlayerPOJO player) {
+    }
+
+    @Override
+    public void playerBanned(PlayerPOJO player) {
     }
 }
